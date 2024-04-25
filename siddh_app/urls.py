@@ -4,5 +4,5 @@ from siddh_app import views
 app_name = 'siddh_app'
 
 urlpatterns = [
-    path('', views.home, name='home'),    
+    path('', views.StudentRecord.as_view(), name='studentrecord'),    
 ]
