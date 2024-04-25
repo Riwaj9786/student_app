@@ -9,7 +9,7 @@ class Faculty(models.Model):
     faculty_name = models.CharField(max_length=70)
 
     def __str__(self):
-        return self.faculty_name
+        return self.faculty_id
 
 
 
@@ -48,7 +48,7 @@ class Student(models.Model):
 
             # Generate registration number based on faculty code, batch year, and student count
             count = Student.objects.filter(faculty=self.faculty, batch_year=self.batch_year).count() + 1
-            registration_number = f"{self.batch_year}-1-07-{count}"
+            registration_number = f"{self.batch_year}-1-{self.faculty.pk}-{count}"
             self.registration_number = slugify(registration_number)  # Generate a slug from the registration number
         
         super().save(*args, **kwargs)
