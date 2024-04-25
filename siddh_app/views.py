@@ -12,7 +12,7 @@ class StudentRecord(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['students'] = Student.objects.all()
+        context['students'] = Student.objects.all().order_by('-batch_year')
         return context
     
 
