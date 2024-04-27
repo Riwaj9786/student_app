@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from siddh_app.forms import StudentForm
-from siddh_app.models import Student, College, Faculty, Department
+from siddh_app.models import Student, College, Faculty, Program
 from django.views.generic import (TemplateView,
                                   CreateView)
 
@@ -16,5 +16,10 @@ class StudentRecord(TemplateView):
     
 
 class CreateStudentView(CreateView):
-    fields = ('batch_year', 'first_name', 'middle_name', 'last_name', 'gender', 'do_birth', 'email_add', 'faculty', 'semester')
+    fields = ('batch_year', 'first_name', 'middle_name', 'last_name', 'gender', 'do_birth', 'email_add', 'program', 'faculty', 'college', 'semester')
     model = Student
+
+
+class CreateProgramView(CreateView):
+    fields = ('__all__')
+    model = Program

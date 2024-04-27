@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.utils.text import slugify
 from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class College(models.Model):
@@ -26,7 +28,21 @@ class Faculty(models.Model):
 
     def __str__(self):
         return self.faculty_id
+
+
+
+
+class Program(models.Model):
+    program_id = models.CharField(max_length=12, default=None, unique=True)
+    program_name = models.CharField(max_length=60)
+
+    def get_absolute_url(self):
+        return reverse("siddh_app:studentrecord")
+
+    def __str__(self):
+        return self.program_id
     
+
 
 
 class Course(models.Model):
@@ -35,18 +51,31 @@ class Course(models.Model):
 
     def __str__(self):
         return self.course_name
+    
 
 
+class ProgramCourse(models.Model):
+    SEMESTER_CHOICES = (
+        ('I', 'I'),
+        ('II', 'II'),
+        ('III', 'III'),
+        ('IV', 'IV'),
+        ('V', 'V'),
+        ('VI', 'VI'),
+        ('VII', 'VII'),
+        ('VIII', 'VIII'),
+    )
 
+    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    semester = models.CharField(max_length=5, default=None, choices=SEMESTER_CHOICES)
+    credit_hour = models.PositiveIntegerField(default= None, null=True)
 
-class Department(models.Model):
-    faculty = models.ForeignKey(Faculty,default=None, on_delete=models.CASCADE)
-    depart_id = models.CharField(max_length=12, unique=True)
-    depart_name = models.CharField(max_length=35)
-    courses = models.ManyToManyField(Course, related_name='departments')
+    class Meta:
+        unique_together = ('program', 'course')
 
     def __str__(self):
-        return self.depart_id
+        return '{} - {}'.format(self.course, self.program)
     
 
 
@@ -79,7 +108,7 @@ class Student(models.Model):
     email_add = models.EmailField(max_length=254)
     college = models.ForeignKey(College, default=None, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
-    depart = models.ForeignKey(Department, default=None, on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, default=None, on_delete=models.CASCADE)
     semester = models.CharField(max_length=4, choices=SEMESTER_CHOICES)
 
     def save(self, *args, **kwargs):
@@ -102,7 +131,13 @@ class Student(models.Model):
     
 
 
+class Marks(models.Model):
+    student = models.ForeignKey(Student, default=None, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    marks = models.DecimalField(max_digits=5, decimal_places=2)
 
+    def __str__(self):
+        return f"{self.student.first_name} - {self.course.course_name}: {self.marks}"
 
 
     
