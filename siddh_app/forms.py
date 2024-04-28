@@ -1,5 +1,5 @@
 from django import forms
-from siddh_app.models import Student, Faculty
+from siddh_app.models import Student, Faculty, Mark
 
 class StudentForm(forms.ModelForm):
 
@@ -11,3 +11,10 @@ class StudentForm(forms.ModelForm):
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),  # Use DateInput widget with type='date'
             'text': forms.TextInput(attrs={'class': 'textinputclass'}),
         }
+
+
+
+class MarksUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Mark
+        fields = ['marks']

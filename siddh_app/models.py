@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models.signals import post_save
@@ -30,6 +30,14 @@ class Faculty(models.Model):
         return self.faculty_id
 
 
+class Semester(models.Model):
+    semester_id = models.PositiveIntegerField(unique=True, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    semester_name = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.semester_name
+    
+
 
 
 class Program(models.Model):
@@ -48,6 +56,7 @@ class Program(models.Model):
 class Course(models.Model):
     course_id = models.CharField(max_length=8, unique=True)
     course_name = models.CharField(max_length=50)
+    program = models.ManyToManyField(Program, through='ProgramCourse')
 
     def __str__(self):
         return self.course_name
@@ -55,20 +64,9 @@ class Course(models.Model):
 
 
 class ProgramCourse(models.Model):
-    SEMESTER_CHOICES = (
-        ('I', 'I'),
-        ('II', 'II'),
-        ('III', 'III'),
-        ('IV', 'IV'),
-        ('V', 'V'),
-        ('VI', 'VI'),
-        ('VII', 'VII'),
-        ('VIII', 'VIII'),
-    )
-
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    semester = models.CharField(max_length=5, default=None, choices=SEMESTER_CHOICES)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     credit_hour = models.PositiveIntegerField(default= None, null=True)
 
     class Meta:
@@ -87,17 +85,6 @@ class Student(models.Model):
         ('O', 'Other'),
     )
 
-    SEMESTER_CHOICES = (
-        ('I', 'I'),
-        ('II', 'II'),
-        ('III', 'III'),
-        ('IV', 'IV'),
-        ('V', 'V'),
-        ('VI', 'VI'),
-        ('VII', 'VII'),
-        ('VIII', 'VIII'),
-    )
-
     registration_number = models.CharField(max_length=30, default=None, unique=True, editable=False)
     batch_year = models.CharField(max_length=4, validators=[MinLengthValidator(4), MaxLengthValidator(4)])
     first_name = models.CharField(max_length=40)
@@ -109,7 +96,7 @@ class Student(models.Model):
     college = models.ForeignKey(College, default=None, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, default=None, on_delete=models.CASCADE)
-    semester = models.CharField(max_length=4, choices=SEMESTER_CHOICES)
+    semester = models.ForeignKey(Semester, default=None, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.registration_number:
@@ -131,10 +118,10 @@ class Student(models.Model):
     
 
 
-class Marks(models.Model):
+class Mark(models.Model):
     student = models.ForeignKey(Student, default=None, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    marks = models.DecimalField(max_digits=5, decimal_places=2)
+    marks = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     def __str__(self):
         return f"{self.student.first_name} - {self.course.course_name}: {self.marks}"

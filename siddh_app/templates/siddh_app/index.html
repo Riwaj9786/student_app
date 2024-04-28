@@ -5,12 +5,12 @@
 
     <div class="container">
 
-        <table>
+        <table class="table table-striped">
             <thead>
                 <td>Batch</td>
+                <td>Registration Number</td>
                 <td>First Name</td>
                 <td>Last Name</td>
-                <td>Registration Number</td>
                 <td>Gender</td>
                 <td>Faculty</td>
                 <td>Semester</td>
@@ -20,9 +20,9 @@
             {% for student in students %}
             <tr>
                 <td>{{student.batch_year}}</td>
+                <td>{{student.registration_number}}</td>
                 <td>{{student.first_name}}</td>
                 <td>{{student.last_name}}</td>
-                <td>{{student.registration_number}}</td>
                 <td>{{student.gender}}</td>
                 <td>{{student.faculty}}</td>
                 <td>{{student.semester}}</td>
