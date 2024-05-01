@@ -45,7 +45,7 @@ class Program(models.Model):
     program_name = models.CharField(max_length=60)
 
     def get_absolute_url(self):
-        return reverse("siddh_app:studentrecord")
+        return reverse("siddh_app:programrecord")
 
     def __str__(self):
         return self.program_id

@@ -5,15 +5,28 @@
 {% block body_block %}
 
 <div class="container">
-    <form action="{% url 'siddh_app:create_student' %}" method="post">
+
+    <div class="jumbotron p-4">
         
-        {% csrf_token %}
+        <hr class="my-16" style="border-top: 4px solid;">
 
-        {{form.as_p}}
+        <h1>Student Details:</h1>
 
-        <input type="submit" class="btn btn-primary" value="Submit">
+        <hr class="my-4" style="border-top: 4px solid;">
+    </div>
 
-    </form>
+    <div class="jumbotron">
+        <form action="{% url 'siddh_app:create_student' %}" method="post">
+        
+            {% csrf_token %}
+    
+            {{form.as_p}}
+    
+            <input type="submit" class="btn btn-primary" value="Submit">
+    
+        </form>
+    </div>
+
 </div>
 
 {% endblock %}

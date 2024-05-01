@@ -1,37 +1,58 @@
 <!DOCTYPE html>
-{% extends 'siddh_app/base.html' %}
+{% extends 'siddh_app/base.html' %} {% block body_block %}
 
-{% block body_block %}
+<div class="container">
+  <div class="jumbotron p-4">
+    <hr class="my-16" style="border-top: 4px solid" />
+
+    <h1>Student Details:</h1>
+
+    <hr class="my-4" style="border-top: 4px solid" />
+
+    <table class="table table-striped">
+      <thead>
+        <td>Batch</td>
+        <td>Registration Number</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Gender</td>
+        <td>Faculty</td>
+        <td>Semester</td>
+        <td>Update</td>
+      </thead>
+
+      {% for student in students %}
+      <tr>
+        <td>{{student.batch_year}}</td>
+        <td>{{student.registration_number}}</td>
+        <td>{{student.first_name}}</td>
+        <td>{{student.last_name}}</td>
+        <td>{{student.gender}}</td>
+        <td>{{student.faculty}}</td>
+        <td>{{student.semester}}</td>
+        <td>
+          <a href="#">
+            <input
+              type="submit"
+              class="btn btn-primary btn-sm"
+              value="Update"
+            />
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <hr class="my-4" style="border-top: 4px solid" />
 
     <div class="container">
-
-        <table class="table table-striped">
-            <thead>
-                <td>Batch</td>
-                <td>Registration Number</td>
-                <td>First Name</td>
-                <td>Last Name</td>
-                <td>Gender</td>
-                <td>Faculty</td>
-                <td>Semester</td>
-            </thead>
-    
-            
-            {% for student in students %}
-            <tr>
-                <td>{{student.batch_year}}</td>
-                <td>{{student.registration_number}}</td>
-                <td>{{student.first_name}}</td>
-                <td>{{student.last_name}}</td>
-                <td>{{student.gender}}</td>
-                <td>{{student.faculty}}</td>
-                <td>{{student.semester}}</td>
-            </tr>
-            {% endfor %}
-    
-        </table>
+      <a
+        class="btn btn-primary btn-sm"
+        href="{% url 'siddh_app:create_student' %}"
+        >Create Student</a
+      >
     </div>
-
-    
+  </div>
+</div>
 
 {% endblock %}

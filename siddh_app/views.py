@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from siddh_app.forms import StudentForm, MarksUpdateForm
 from siddh_app.models import Student, College, Faculty, Program, Mark, Semester
 from django.views.generic import (TemplateView,
-                                  CreateView)
+                                  CreateView,
+                                  DetailView)
 
 # Create your views here.
+def home(request):
+    return render(request, 'siddh_app/home.html', {'heading': 'Welcome to the Student App!'})
+
+
 class StudentRecord(TemplateView):
     template_name = 'siddh_app/index.html'
     model = Student
@@ -15,6 +20,17 @@ class StudentRecord(TemplateView):
         context['students'] = Student.objects.all().order_by('-batch_year')
         return context
     
+
+class ProgramRecord(TemplateView):
+    template_name = 'siddh_app/program.html'
+    model = Program
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['programs'] = Program.objects.all().order_by('program_name')
+        return context
+    
+
 
 class CreateStudentView(CreateView):
     fields = ('batch_year', 'first_name', 'middle_name', 'last_name', 'gender', 'do_birth', 'email_add', 'program', 'faculty', 'college', 'semester')
