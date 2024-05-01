@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+{% extends 'siddh_app/base.html' %}
+
+{% block body_block %}
+
+    <form action="{% url 'siddh_app:update_marks' %}" method="post">
+        
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Update Marks">
+
+    </form>
+
+{% endblock %}

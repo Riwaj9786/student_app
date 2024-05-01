@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends 'siddh_app/base.html' %} 
+
+
+{% block body_block %}
+
+<div class="container">
+  <div class="jumbotron p-4">
+    <hr class="my-16" style="border-top: 4px solid" />
+
+    <h1>Program Details:</h1>
+
+    <hr class="my-4" style="border-top: 4px solid" />
+
+    <table class="table table-striped">
+      <thead>
+        <td>Program ID</td>
+        <td>Program Name</td>
+        <td></td>
+      </thead>
+
+      {% for program in programs %}
+      <tr>
+        <td>{{program.program_id}}</td>
+        <td>{{program.program_name}}</td>
+          <td>
+            <a href="#">
+                <input
+                  type="submit"
+                  class="btn btn-primary btn-sm"
+                  value="Update"
+                />
+              </a>
+          </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <hr class="my-4" style="border-top: 4px solid" />
+
+    <div class="container">
+      <a
+        class="btn btn-primary btn-sm"
+        href="{% url 'siddh_app:create_program' %}"
+        >Create Program</a
+      >
+    </div>
+  </div>
+</div>
+
+{% endblock %}
